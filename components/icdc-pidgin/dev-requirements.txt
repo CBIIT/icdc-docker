@@ -1,0 +1,6 @@
+codacy-coverage
+pytest==3.2.3
+pytest-cov==2.5.1
+pytest-flask==0.10.0
+flasgger==0.9.1
+PyYAML==3.13
