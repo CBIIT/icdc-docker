@@ -48,7 +48,18 @@ The script by default generate SSL cert for `localhost`, if you are running this
 
 If you are using MacOS, you may run into an error with the default MacOS OpenSSL config not including the configuration for v3_ca certificate generation. You can refer to the solution on [this Github issue](https://github.com/jetstack/cert-manager/issues/279) on a related issue on Jetstack's cert-manager.
 
-This Docker Compose setup also requires Google API Credentials in order for the fence microservice to complete its authentication. If you have Google API credentials set up already that you would like to use with the local gen3 Docker Compose setup, simply add `https://localhost/user/login/google/login/` OR `https://YOUR_REMOTE_MACHINE_DOMAIN/user/login/google/login/` to your Authorized redirect URIs in your credentials and copy your client ID and client secret from your credentials to the 'google_client_secret' and 'google_client_id' fields in the `api_configs/fence_creds.json` JSON file.
+This Docker Compose setup also requires Google API Credentials in order for the fence microservice to complete its authentication. If you have Google API credentials set up already that you would like to use with the local gen3 Docker Compose setup, simply add `https://localhost/user/login/google/login/` OR `https://YOUR_REMOTE_MACHINE_DOMAIN/user/login/google/login/` to your Authorized redirect URIs in your credentials. Make a note of your Google Client Id and Client Secret. Make a copy of the env.properties.template in the api_configs folder and call it env.properties. An AWS Policy and an AWS User with the AWS policy attached to the AWS User would need to be created. The AWS Policy should allow full access to the S3 Bucket which would store the raw image and other files and the ability to assume a role (STS) to access that bucket are required. Store the Access Key and Secret Access Key securely and note the ARN of the policy created. 
+
+ICDCHOST=YOUR HOST NAME  (e.g. ICDCHOST=ec2-xx-yy-ww-zzz.us-west-2.compute.amazonaws.com)
+GOOGLE_C_SECRET=YOUR_GOOGLE_CLIENT_ SECRET
+GOOGLE_C_ID=YOUR_GOOGLE_CLIENT_ ID
+AWS_ACCESS_KEY_ID=YOUR_AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY=YOUR_AWS_SECRET_ACCESS_KEY
+AWS_ROLE_ARN=arn:aws:iam::ACCOUNT_ID:role\/SAMPLE_POLICY_ARN (Remember to escape the backslash)
+S3_BUCKET_NAME=S3_BUCKET_NAME_TO_STORE_RAW_FILES (i.e. Bucket name to store BAM/Image Files)
+
+After updating env.properties, go ahead and execute ./setup_env.sh . This will copy that info to all the desired setting files for fence, indexd, peregrine and sheepdog.
+
 
  If you do not already have Google API Credentials, follow the steps below to set them up. See image below for example on a sample Google account.
 
@@ -62,7 +73,7 @@ To set up Google API Credentials, go to [the credentials page of the Google Deve
 ### Setting up Users
 To set up user privileges for the services, please edit the `apis_configs/user.yaml` file, following the example format shown in the file. The fence container will automatically sync this file to the `fence_db` database on startup. If you wish to update user privileges while the containers are running (without restarting the container), just edit the `apis_configs/user.yaml` file and then run
 ```
-docker exec -it compose-services_fence_1 fence-create sync --yaml user.yaml
+docker exec -it fence_container_name fence-create sync --yaml user.yaml
 ```
 This command will enter the fence container to run the fence-create sync command, which will update your user privileges.
 
