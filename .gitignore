@@ -1,0 +1,10 @@
+temp*/
+apis_configs/env.properties
+apis_configs/*.bak
+apis_configs/fence_credentials.json
+apis_configs/fence_creds.json
+apis_configs/fence_settings.py
+apis_configs/peregrine_creds.json
+apis_configs/peregrine_settings.py
+apis_configs/sheepdog_creds.json
+apis_configs/sheepdog_settings.py

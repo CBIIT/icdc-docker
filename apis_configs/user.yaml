@@ -1,0 +1,12 @@
+cloud_providers: {}
+
+groups: {}
+
+users:
+  cdis:
+    admin: True
+  nciss.dev@gmail.com:
+    admin: True
+    projects:
+    - auth_id: icdc_demo
+      privilege: ['create', 'read', 'update', 'delete', 'upload', 'read-storage']
