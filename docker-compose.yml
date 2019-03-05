@@ -13,7 +13,7 @@ services:
     depends_on:
       - postgres
   fence:
-    image: "wuyesunwj/icdc-fence:baseline"
+    image: "wuyesunwj/icdc-fence:1.0"
     command: bash /var/www/fence/fence_setup.sh
     networks:
       - devnet
@@ -43,7 +43,8 @@ services:
       - ./scripts/peregrine_setup.sh:/peregrine_setup.sh
       - ./example-schemas:/schemas_dir
     environment: &env
-      DICTIONARY_URL: https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json
+      DICTIONARY_URL: https://s3.amazonaws.com/icdc-pub/icdc-gen3-dictionary.json
+      # DICTIONARY_URL: https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json
       # PATH_TO_SCHEMA_DIR: /schemas_dir
       REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
     depends_on:
